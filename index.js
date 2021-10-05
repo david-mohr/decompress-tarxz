@@ -1,29 +1,31 @@
-'use strict';
-const decompressTar = require('decompress-tar');
-const fileType = require('file-type');
-const isStream = require('is-stream');
-const lzmaNative = require('lzma-native');
+import {Buffer} from 'node:buffer';
+import decompressTar from 'decompress-tar';
+import FileType from 'file-type';
+import {isStream} from 'is-stream';
+import lzmaNative from 'lzma-native';
 
-module.exports = () => async input => {
-	const isBuffer = Buffer.isBuffer(input);
-	const type = isBuffer ? fileType(input) : null;
+export default function decompress() {
+	return async input => {
+		const isBuffer = Buffer.isBuffer(input);
+		const type = isBuffer ? await FileType.fromBuffer(input) : null;
 
-	if (!isBuffer && !isStream(input)) {
-		return Promise.reject(new TypeError(`Expected a Buffer or Stream, got ${typeof input}`));
-	}
+		if (!isBuffer && !isStream(input)) {
+			throw new TypeError(`Expected a Buffer or Stream, got ${typeof input}`);
+		}
 
-	if (isBuffer && (!type || type.ext !== 'xz')) {
-		return Promise.resolve([]);
-	}
+		if (isBuffer && (!type || type.ext !== 'xz')) {
+			return [];
+		}
 
-	const decompressor = lzmaNative.createDecompressor();
-	const result = decompressTar()(decompressor);
+		const decompressor = lzmaNative.createDecompressor();
+		const result = decompressTar()(decompressor);
 
-	if (isBuffer) {
-		decompressor.end(input);
-	} else {
-		input.pipe(decompressor);
-	}
+		if (isBuffer) {
+			decompressor.end(input);
+		} else {
+			input.pipe(decompressor);
+		}
 
-	return result;
-};
+		return result;
+	};
+}
