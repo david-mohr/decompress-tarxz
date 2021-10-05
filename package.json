@@ -1,6 +1,7 @@
 {
   "name": "decompress-tarxz",
   "version": "3.0.0",
+  "type": "module",
   "description": "decompress tar.xz plugin",
   "license": "MIT",
   "repository": "kevva/decompress-tarxz",
@@ -27,14 +28,14 @@
     "xz"
   ],
   "dependencies": {
-    "decompress-tar": "^4.1.0",
-    "file-type": "^12.3.0",
-    "is-stream": "^2.0.0",
-    "lzma-native": "^4.0.5"
+    "decompress-tar": "^4.1.1",
+    "file-type": "^16.5.3",
+    "is-stream": "^3.0.0",
+    "lzma-native": "^8.0.1"
   },
   "devDependencies": {
-    "ava": "^2.3.0",
-    "is-jpg": "^2.0.0",
-    "xo": "^0.24.0"
+    "ava": "^3.15.0",
+    "is-jpg": "^3.0.0",
+    "xo": "^0.45.0"
   }
 }
